@@ -1,7 +1,7 @@
 import React from 'react';
-import { BookOpen, MapPin, Layers, Hash } from 'lucide-react';
+import { BookOpen, MapPin, Layers, Hash, User as UserIcon, Plus, Trash2 } from 'lucide-react';
 
-const CourseCard = ({ course }) => {
+const CourseCard = ({ course, onCourseDeleted }) => {
   return (
     <div className="glass-card p-6 rounded-3xl hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all group overflow-hidden relative">
       <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -37,15 +37,20 @@ const CourseCard = ({ course }) => {
             <div className="h-4 w-1 bg-blue-600 rounded-full opacity-50"></div>
           </div>
         </div>
-        <button className="h-10 w-10 flex items-center justify-center bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white rounded-2xl transition-all border border-blue-900/50 active:scale-90">
-             <Plus className="h-5 w-5" />
-        </button>
+        <div className="flex gap-2">
+          <button 
+            onClick={() => onCourseDeleted(course._id)}
+            className="h-10 w-10 flex items-center justify-center bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white rounded-2xl transition-all border border-red-900/20 active:scale-90"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+          <button className="h-10 w-10 flex items-center justify-center bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white rounded-2xl transition-all border border-blue-900/50 active:scale-90">
+               <Plus className="h-5 w-5" />
+          </button>
+        </div>
       </div>
     </div>
   );
 };
-
-// Internal import helper since I can't easily export multiple from here
-import { User as UserIcon, Plus } from 'lucide-react';
 
 export default CourseCard;

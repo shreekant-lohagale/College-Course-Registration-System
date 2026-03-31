@@ -2,7 +2,7 @@ import React from 'react';
 import { BookOpen, LogOut, LayoutDashboard, Settings } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const Navbar = () => {
+const Navbar = ({ onSettingsClick }) => {
   const { logout } = useAuth();
 
   return (
@@ -22,10 +22,13 @@ const Navbar = () => {
             <LayoutDashboard className="h-4 w-4" />
             Dashboard
           </a>
-          <a href="#" className="text-sm font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-2">
+          <button 
+            onClick={onSettingsClick}
+            className="text-sm font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-2"
+          >
             <Settings className="h-4 w-4" />
             Settings
-          </a>
+          </button>
         </div>
         <div className="h-6 w-px bg-slate-800 hidden md:block"></div>
         <button

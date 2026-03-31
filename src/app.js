@@ -29,9 +29,14 @@ if (process.env.NODE_ENV === 'development') {
 // Passport middleware
 app.use(passport.initialize());
 
+const { analyzeInsurance } = require('./controllers/analysisController');
+const { ensureAuth } = require('./middleware/authMiddleware');
+
 // Routes
 app.use('/', require('./routes/authRoutes'));
 app.use('/api', require('./routes/courseRoutes'));
+app.use('/api/insurance', require('./routes/insuranceRoutes'));
+app.get('/api/insurance/analyze', ensureAuth, analyzeInsurance);
 
 // Root route for testing
 app.get('/', (req, res) => {
