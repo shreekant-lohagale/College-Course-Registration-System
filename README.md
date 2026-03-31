@@ -1,4 +1,4 @@
-# 🎓 CCRS Portal: Academic Registration & Insurance ML Analysis
+# CCRS Portal: Academic Registration & Insurance ML Analysis
 
 **A sophisticated full-stack portal designed to bridge academic course management with advanced medical data analysis.**
 
@@ -6,22 +6,22 @@ Built with a **Deep Space** aesthetic, this platform provides a premium experien
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-### 📚 Academic Course Management
+### Academic Course Management
 *   **Dynamic Registration**: Register for courses with high-fidelity UI cards.
 *   **Secure Dashboard**: Synchronous data management with a modern, glass-morphic interface.
-*   **RESTful Integration**: Full CRUD operations for all academic records.
+*   **RESTFUL Integration**: Full CRUD operations for all academic records.
 
-### 🏥 Insurance Portfolio & ML Engine
+### Insurance Portfolio & ML Engine
 *   **Advanced Data Entry**: Mongoose-validated medical record entry (Age, BMI, Smoker Status).
 *   **Machine Learning Integration**: Trigger powerful Python ML models directly from the UI.
-*   **Predictive Analytics**: compare **Linear Regression** vs **Random Forest** R² scores and MSE.
+*   **Predictive Analytics**: Compare **Linear Regression** vs **Random Forest** R2 scores and MSE.
 *   **EDA Visualizations**: Dynamic rendering of Exploratory Data Analysis plots saved on the cloud.
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 | Layer | Technology |
 | :--- | :--- |
@@ -33,7 +33,7 @@ Built with a **Deep Space** aesthetic, this platform provides a premium experien
 
 ---
 
-## ⚙️ Local Setup Guide
+## Local Setup Guide
 
 1.  **Clone the Repository**:
     ```bash
@@ -66,14 +66,14 @@ Built with a **Deep Space** aesthetic, this platform provides a premium experien
 
 ---
 
-## 🚢 Deployment Configuration
+## Deployment Configuration
 
-### 🌌 Vercel (Frontend)
+### Vercel (Frontend)
 *   **Root Directory**: `client`
 *   **Framework**: Vite
 *   **Env Variables**: `VITE_API_BASE_URL` (your Render URL)
 
-### ☁️ Render (Backend)
+### Render (Backend)
 *   **Runtime**: Node
 *   **Build Command**: `npm run build` (Installs Node & Python requirements)
 *   **Start Command**: `npm start`
@@ -81,9 +81,9 @@ Built with a **Deep Space** aesthetic, this platform provides a premium experien
 
 ---
 
-## 👨‍💻 Author
+## Author
 **Shreekant Lohagale** 
 *Expertly designed for academic and analytical excellence.*
 
 ---
-*© 2026 CCRS Portal. All rights reserved.*
+*2026 CCRS Portal. All rights reserved.*
