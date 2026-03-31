@@ -21,7 +21,8 @@ const AddCourseModal = ({ isOpen, onClose, onCourseAdded, token }) => {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/courses', formData, {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      const res = await axios.post(`${apiBaseUrl}/api/courses`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       onCourseAdded(res.data);

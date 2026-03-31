@@ -48,11 +48,12 @@ const Dashboard = () => {
   const fetchData = async () => {
     setFetching(true);
     try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
       const [coursesRes, insuranceRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/courses', {
+        axios.get(`${apiBaseUrl}/api/courses`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get('http://localhost:5000/api/insurance', {
+        axios.get(`${apiBaseUrl}/api/insurance`, {
           headers: { Authorization: `Bearer ${token}` },
         })
       ]);
@@ -68,7 +69,8 @@ const Dashboard = () => {
   const handleDeleteCourse = async (id) => {
     if (!window.confirm("Remove this course from your registration?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/courses/${id}`, {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      await axios.delete(`${apiBaseUrl}/api/courses/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCourses(courses.filter(c => c._id !== id));
@@ -80,7 +82,8 @@ const Dashboard = () => {
   const handleDeleteInsurance = async (id) => {
     if (!window.confirm("Remove this insurance record?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/insurance/${id}`, {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      await axios.delete(`${apiBaseUrl}/api/insurance/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setInsuranceRecords(insuranceRecords.filter(r => r._id !== id));

@@ -13,7 +13,8 @@ const InsuranceTable = ({ records, onRecordAdded, onRecordDeleted, token, viewMo
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-       const res = await axios.post('http://localhost:5000/api/insurance', formData, {
+       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+       const res = await axios.post(`${apiBaseUrl}/api/insurance`, formData, {
          headers: { Authorization: `Bearer ${token}` }
        });
        onRecordAdded(res.data);
@@ -28,7 +29,8 @@ const InsuranceTable = ({ records, onRecordAdded, onRecordDeleted, token, viewMo
     setIsAnalyzing(true);
     setAnalysisResult(null);
     try {
-       const res = await axios.get('http://localhost:5000/api/insurance/analyze', {
+       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+       const res = await axios.get(`${apiBaseUrl}/api/insurance/analyze`, {
          headers: { Authorization: `Bearer ${token}` }
        });
        if (res.data.success) {
@@ -120,7 +122,7 @@ const InsuranceTable = ({ records, onRecordAdded, onRecordDeleted, token, viewMo
                     <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
                     <div className="relative bg-slate-950 p-2 rounded-[2.5rem] border border-slate-800">
                        <img 
-                          src="http://localhost:5000/insurance/insurance_eda_plots.png" 
+                          src={`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/insurance/insurance_eda_plots.png`} 
                           alt="EDA Visualization" 
                           className="w-full h-auto rounded-[2rem] shadow-2xl opacity-80 group-hover:opacity-100 transition-opacity"
                        />
