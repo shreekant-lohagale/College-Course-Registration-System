@@ -37,9 +37,13 @@ const SettingsModal = ({ isOpen, onClose, user, logout }) => {
             {/* User Info */}
             <div className="p-6 bg-slate-950/50 rounded-3xl border border-slate-800/50">
                <div className="flex items-center gap-4 mb-6">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 p-1">
-                     <div className="h-full w-full rounded-xl bg-slate-950 flex items-center justify-center">
-                        <User className="h-8 w-8 text-white" />
+                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 p-0.5">
+                     <div className="h-full w-full rounded-xl bg-slate-950 overflow-hidden flex items-center justify-center">
+                        {user?.image ? (
+                           <img src={user.image} alt={user.displayName} className="h-full w-full object-cover" />
+                        ) : (
+                           <User className="h-8 w-8 text-white" />
+                        )}
                      </div>
                   </div>
                   <div>
@@ -56,7 +60,7 @@ const SettingsModal = ({ isOpen, onClose, user, logout }) => {
                <div className="space-y-3 pt-4 border-t border-slate-800/50">
                   <div className="flex items-center justify-between text-xs font-bold">
                      <span className="text-slate-600 uppercase tracking-widest">Email Address</span>
-                     <span className="text-slate-400">{user?.email}</span>
+                     <span className="text-slate-400">{user?.email || 'No email available'}</span>
                   </div>
                   <div className="flex items-center justify-between text-xs font-bold">
                      <span className="text-slate-600 uppercase tracking-widest">User ID</span>

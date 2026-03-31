@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Shield, Plus, Trash2, HeartPulse, User, MapPin, DollarSign, Activity, AlertCircle, TrendingUp } from 'lucide-react';
 import axios from 'axios';
 
-const InsuranceTable = ({ records, onRecordAdded, onRecordDeleted, token }) => {
+const InsuranceTable = ({ records, onRecordAdded, onRecordDeleted, token, viewMode = 'grid', filter = 'all' }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
@@ -140,7 +140,7 @@ const InsuranceTable = ({ records, onRecordAdded, onRecordDeleted, token }) => {
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-6">
              <div className="space-y-2">
                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Age</label>
-               <input type="number" required placeholder="25" className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-white focus:border-blue-500 outline-none" value={formData.age} onChange={e => setFormData({...formData, age: e.target.value})} />
+               <input type="number" min="0" max="120" required placeholder="25" className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-white focus:border-blue-500 outline-none" value={formData.age} onChange={e => setFormData({...formData, age: e.target.value})} />
              </div>
              <div className="space-y-2">
                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Sex</label>
@@ -150,8 +150,12 @@ const InsuranceTable = ({ records, onRecordAdded, onRecordDeleted, token }) => {
                </select>
              </div>
              <div className="space-y-2">
-               <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">BMI</label>
-               <input type="number" step="0.1" required placeholder="24.5" className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-white focus:border-blue-500 outline-none" value={formData.bmi} onChange={e => setFormData({...formData, bmi: e.target.value})} />
+               <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">BMI Index</label>
+               <input type="number" step="0.1" min="10" max="100" required placeholder="24.5" className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-white focus:border-blue-500 outline-none" value={formData.bmi} onChange={e => setFormData({...formData, bmi: e.target.value})} />
+             </div>
+             <div className="space-y-2">
+               <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Children</label>
+               <input type="number" min="0" max="20" required placeholder="0" className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-white focus:border-blue-500 outline-none" value={formData.children} onChange={e => setFormData({...formData, children: e.target.value})} />
              </div>
              <div className="space-y-2">
                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Smoker</label>
@@ -169,9 +173,9 @@ const InsuranceTable = ({ records, onRecordAdded, onRecordDeleted, token }) => {
                  <option value="northwest">Northwest</option>
                </select>
              </div>
-             <div className="space-y-2 md:col-span-2">
+             <div className="space-y-2 md:col-span-1">
                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Charges (Actual Cost)</label>
-               <input type="number" required placeholder="12800" className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-white focus:border-blue-500 outline-none" value={formData.charges} onChange={e => setFormData({...formData, charges: e.target.value})} />
+               <input type="number" min="0" max="1000000" required placeholder="12800" className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-white focus:border-blue-500 outline-none" value={formData.charges} onChange={e => setFormData({...formData, charges: e.target.value})} />
              </div>
              <div className="flex items-end">
                <button type="submit" className="w-full py-3 bg-white text-black rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-blue-400 transition-colors">Save Record</button>
@@ -180,61 +184,112 @@ const InsuranceTable = ({ records, onRecordAdded, onRecordDeleted, token }) => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {records.length === 0 ? (
+      {/* Grid or List Content */}
+      <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-3"}>
+        {records
+          .filter(r => {
+            if (filter === 'smoker') return r.smoker === 'yes';
+            if (filter === 'non-smoker') return r.smoker === 'no';
+            return true;
+          })
+          .length === 0 ? (
           <div className="col-span-full py-20 flex flex-col items-center justify-center glass-card rounded-[3rem] border-dashed border-slate-800">
             <HeartPulse className="h-12 w-12 text-slate-800 mb-4" />
-            <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">No insurance data found</p>
+            <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">No matching insurance data found</p>
           </div>
         ) : (
-          records.map((record) => (
-            <div key={record._id} className="glass-card p-6 rounded-[2rem] hover:border-blue-500/50 transition-all group relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10">
-                 <Shield className="h-20 w-20" />
-              </div>
+          records
+            .filter(r => {
+              if (filter === 'smoker') return r.smoker === 'yes';
+              if (filter === 'non-smoker') return r.smoker === 'no';
+              return true;
+            })
+            .map((record) => (
+            viewMode === 'grid' ? (
+              /* Grid View */
+              <div key={record._id} className="glass-card p-6 rounded-[2rem] hover:border-blue-500/50 transition-all group relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10">
+                   <Shield className="h-20 w-20" />
+                </div>
 
-              <div className="flex justify-between items-start mb-6">
-                 <div className="flex items-center gap-2 bg-slate-950/50 px-3 py-1 rounded-full border border-slate-800">
-                    <User className="h-3 w-3 text-blue-500" />
-                    <span className="text-[10px] font-black text-slate-400 uppercase">{record.sex}, {record.age}y</span>
+                <div className="flex justify-between items-start mb-6">
+                   <div className="flex items-center gap-2 bg-slate-950/50 px-3 py-1 rounded-full border border-slate-800">
+                      <User className="h-3 w-3 text-blue-500" />
+                      <span className="text-[10px] font-black text-slate-400 uppercase">{record.sex}, {record.age}y</span>
+                   </div>
+                   <button 
+                    onClick={() => onRecordDeleted(record._id)}
+                    className="p-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-lg transition-all active:scale-90"
+                   >
+                      <Trash2 className="h-4 w-4" />
+                   </button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                   <div>
+                      <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest block mb-1">BMI Index</span>
+                      <div className="flex items-center gap-2">
+                         <Activity className="h-4 w-4 text-emerald-500" />
+                         <span className="text-lg font-black text-white">{record.bmi}</span>
+                      </div>
+                   </div>
+                   <div>
+                      <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest block mb-1">Smoker Status</span>
+                      <span className={`text-[10px] font-black px-2 py-0.5 rounded-md border ${record.smoker === 'yes' ? 'bg-orange-500/10 border-orange-500/20 text-orange-500' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'} uppercase`}>
+                         {record.smoker === 'yes' ? 'Smoker' : 'Non-Smoker'}
+                      </span>
+                   </div>
+                </div>
+
+                <div className="pt-4 border-t border-slate-800/50 flex justify-between items-center">
+                   <div className="flex items-center gap-1.5">
+                      <MapPin className="h-3 w-3 text-slate-500" />
+                      <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{record.region}</span>
+                   </div>
+                   <div className="flex items-center gap-1">
+                      <DollarSign className="h-4 w-4 text-blue-500" />
+                      <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+                         {record.charges.toLocaleString()}
+                      </span>
+                   </div>
+                </div>
+              </div>
+            ) : (
+              /* List View */
+              <div key={record._id} className="p-4 bg-slate-900/30 rounded-2xl border border-slate-800 hover:border-slate-700 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 group">
+                 <div className="flex items-center gap-4">
+                    <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${record.smoker === 'yes' ? 'bg-orange-500/10 text-orange-500' : 'bg-blue-500/10 text-blue-500'}`}>
+                       <Shield className="h-5 w-5" />
+                    </div>
+                    <div>
+                       <h5 className="text-sm font-black text-white uppercase">{record.sex}, {record.age} Years</h5>
+                       <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{record.region} Region</p>
+                    </div>
                  </div>
+                 
+                 <div className="grid grid-cols-2 md:flex items-center gap-8 text-center md:text-left">
+                    <div className="flex flex-col">
+                       <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">BMI Index</span>
+                       <span className="text-sm font-black text-emerald-400">{record.bmi}</span>
+                    </div>
+                    <div className="flex flex-col">
+                       <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">Children</span>
+                       <span className="text-sm font-black text-indigo-400">{record.children}</span>
+                    </div>
+                    <div className="flex flex-col md:min-w-[100px]">
+                       <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">Charges</span>
+                       <span className="text-sm font-black text-white">${record.charges.toLocaleString()}</span>
+                    </div>
+                 </div>
+
                  <button 
                   onClick={() => onRecordDeleted(record._id)}
-                  className="p-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-lg transition-all active:scale-90"
+                  className="p-2.5 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl transition-all opacity-0 group-hover:opacity-100 active:scale-90"
                  >
                     <Trash2 className="h-4 w-4" />
                  </button>
               </div>
-
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                 <div>
-                    <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest block mb-1">BMI Index</span>
-                    <div className="flex items-center gap-2">
-                       <Activity className="h-4 w-4 text-emerald-500" />
-                       <span className="text-lg font-black text-white">{record.bmi}</span>
-                    </div>
-                 </div>
-                 <div>
-                    <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest block mb-1">Smoker Status</span>
-                    <span className={`text-[10px] font-black px-2 py-0.5 rounded-md border ${record.smoker === 'yes' ? 'bg-orange-500/10 border-orange-500/20 text-orange-500' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'} uppercase`}>
-                       {record.smoker === 'yes' ? 'Smoker' : 'Non-Smoker'}
-                    </span>
-                 </div>
-              </div>
-
-              <div className="pt-4 border-t border-slate-800/50 flex justify-between items-center">
-                 <div className="flex items-center gap-1.5">
-                    <MapPin className="h-3 w-3 text-slate-500" />
-                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{record.region}</span>
-                 </div>
-                 <div className="flex items-center gap-1">
-                    <DollarSign className="h-4 w-4 text-blue-500" />
-                    <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
-                       {record.charges.toLocaleString()}
-                    </span>
-                 </div>
-              </div>
-            </div>
+            )
           ))
         )}
       </div>

@@ -16,20 +16,20 @@ module.exports = function (passport) {
           displayName: profile.displayName,
           firstName: profile.name.givenName,
           lastName: profile.name.familyName,
+          email: profile.emails[0].value,
           image: profile.photos[0].value,
         };
 
         try {
-          let user = await User.findOne({ googleId: profile.id });
-
-          if (user) {
-            done(null, user);
-          } else {
-            user = await User.create(newUser);
-            done(null, user);
-          }
+          const user = await User.findOneAndUpdate(
+            { googleId: profile.id },
+            { $set: newUser },
+            { upsert: true, new: true }
+          );
+          done(null, user);
         } catch (err) {
           console.error(err);
+          done(err, null);
         }
       }
     )

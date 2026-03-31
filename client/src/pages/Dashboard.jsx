@@ -30,6 +30,14 @@ const Dashboard = () => {
   const [fetching, setFetching] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [viewMode, setViewMode] = useState('grid');
+  const [filter, setFilter] = useState('all');
+
+  const toggleFilter = () => {
+    const filters = ['all', 'smoker', 'non-smoker'];
+    const currentIndex = filters.indexOf(filter);
+    setFilter(filters[(currentIndex + 1) % filters.length]);
+  };
 
   useEffect(() => {
     if (token) {
@@ -154,15 +162,25 @@ const Dashboard = () => {
            
            <div className="flex items-center gap-3">
               <div className="bg-slate-900 border border-slate-800 p-1.5 rounded-xl flex items-center shadow-inner">
-                <button className="p-2 bg-slate-800 rounded-lg text-blue-400 shadow-sm">
+                <button 
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-slate-800 text-blue-400 shadow-sm' : 'text-slate-600 hover:text-white'}`}
+                >
                    <LayoutGrid className="h-4 w-4" />
                 </button>
-                <button className="p-2 text-slate-500 hover:text-white transition-colors">
+                <button 
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-slate-800 text-blue-400 shadow-sm' : 'text-slate-600 hover:text-white'}`}
+                >
                    <List className="h-4 w-4" />
                 </button>
               </div>
-              <button className="p-3 bg-slate-900 text-slate-500 rounded-xl hover:text-blue-500 transition-colors border border-slate-800 active:scale-90">
+              <button 
+                onClick={toggleFilter}
+                className={`flex items-center gap-2 p-3 bg-slate-900 rounded-xl transition-all border border-slate-800 active:scale-90 ${filter !== 'all' ? 'text-blue-500 border-blue-500/30' : 'text-slate-500 hover:text-blue-500'}`}
+              >
                  <Filter className="h-4 w-4" />
+                 {filter !== 'all' && <span className="text-[9px] font-black uppercase tracking-widest">{filter}</span>}
               </button>
            </div>
         </div>
@@ -170,6 +188,7 @@ const Dashboard = () => {
         {/* Content Area */}
         <section className="animate-in fade-in slide-in-from-bottom-6 duration-700">
           {fetching ? (
+            /* ... fetching UI ... */
             <div className="flex flex-col items-center justify-center py-48 glass-card rounded-[4rem] border-dashed relative overflow-hidden">
               <div className="absolute inset-0 bg-blue-600/5 animate-pulse"></div>
               <div className="relative">
@@ -214,6 +233,8 @@ const Dashboard = () => {
               onRecordAdded={(record) => setInsuranceRecords([record, ...insuranceRecords])}
               onRecordDeleted={handleDeleteInsurance}
               token={token}
+              viewMode={viewMode}
+              filter={filter}
             />
           )}
         </section>

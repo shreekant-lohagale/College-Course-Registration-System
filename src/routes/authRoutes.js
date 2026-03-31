@@ -4,7 +4,7 @@ const router = express.Router();
 
 // @desc    Auth with Google
 // @route   GET /auth/google
-router.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
+router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 const jwt = require('jsonwebtoken');
 
@@ -16,10 +16,18 @@ router.get(
   '/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/', session: false }),
   (req, res) => {
-    // Generate JWT
-    const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
-      expiresIn: '7d',
-    });
+    const token = jwt.sign(
+      { 
+        id: req.user.id,
+        displayName: req.user.displayName,
+        email: req.user.email,
+        image: req.user.image 
+      }, 
+      process.env.JWT_SECRET, 
+      {
+        expiresIn: '7d',
+      }
+    );
 
     // Redirect to frontend with token
     res.redirect(`${process.env.FRONTEND_URL}/login?token=${token}`);

@@ -4,6 +4,8 @@ const InsuranceSchema = new mongoose.Schema({
   age: {
     type: Number,
     required: true,
+    min: 0,
+    max: 120,
   },
   sex: {
     type: String,
@@ -13,10 +15,14 @@ const InsuranceSchema = new mongoose.Schema({
   bmi: {
     type: Number,
     required: true,
+    min: 10,
+    max: 100,
   },
   children: {
     type: Number,
     default: 0,
+    min: 0,
+    max: 20,
   },
   smoker: {
     type: String,
@@ -31,6 +37,8 @@ const InsuranceSchema = new mongoose.Schema({
   charges: {
     type: Number,
     required: true,
+    min: 0,
+    max: 1000000,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
