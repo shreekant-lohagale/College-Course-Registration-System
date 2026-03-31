@@ -97,8 +97,8 @@ sns.histplot(df['charges'], kde=True, color='blue')
 plt.title('Distribution of Medical Charges')
 
 plt.tight_layout()
-plt.savefig('insurance_eda_plots.png')
-print("Plots saved as 'insurance_eda_plots.png'")
+plt.savefig(os.path.join('insurance', 'insurance_eda_plots.png'))
+print("Plots saved as 'insurance/insurance_eda_plots.png'")
 
 # 5. Insights
 print("\n--- INSIGHTS ---")

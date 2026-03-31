@@ -15,9 +15,14 @@ require('./config/passport')(passport);
 
 const app = express();
 
+const path = require('path');
+
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Static folder for insurance plots
+app.use('/insurance', express.static(path.join(__dirname, '..', 'insurance')));
 
 // Security & Logging
 app.use(helmet());

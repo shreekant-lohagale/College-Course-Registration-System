@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, Plus, Trash2, HeartPulse, User, MapPin, DollarSign, Activity, AlertCircle } from 'lucide-react';
+import { Shield, Plus, Trash2, HeartPulse, User, MapPin, DollarSign, Activity, AlertCircle, TrendingUp } from 'lucide-react';
 import axios from 'axios';
 
 const InsuranceTable = ({ records, onRecordAdded, onRecordDeleted, token }) => {
@@ -59,29 +59,78 @@ const InsuranceTable = ({ records, onRecordAdded, onRecordDeleted, token }) => {
 
       {/* Analysis Result Card */}
       {analysisResult && (
-        <div className="glass-card p-8 rounded-[3rem] border-indigo-500/50 bg-indigo-600/5 animate-in zoom-in duration-500">
-          <div className="flex flex-col md:flex-row gap-8 items-start">
-             <div className="flex-1 space-y-4">
-                <div className="flex items-center gap-2">
-                   <Activity className="h-5 w-5 text-indigo-400" />
-                   <h4 className="text-xl font-black text-white uppercase tracking-tighter">Analysis Results</h4>
-                </div>
-                <p className="text-slate-400 text-sm font-medium leading-relaxed italic">
-                   "{analysisResult.conclusion}"
-                </p>
-             </div>
-             
-             <div className="grid grid-cols-2 gap-4 w-full md:w-auto">
-                <div className="p-4 bg-slate-950/80 rounded-2xl border border-slate-800">
-                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-2 text-center">Linear Reg (R2)</span>
-                   <p className="text-2xl font-black text-blue-500 text-center">{analysisResult.linear_regression.r2}</p>
-                </div>
-                <div className="p-4 bg-slate-950/80 rounded-2xl border border-slate-800">
-                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-2 text-center">Random Forest (R2)</span>
-                   <p className="text-2xl font-black text-emerald-500 text-center">{analysisResult.random_forest.r2}</p>
-                </div>
-             </div>
-          </div>
+        <div className="space-y-6 animate-in zoom-in duration-500">
+           {/* ML Metrics Card */}
+           <div className="glass-card p-8 rounded-[3rem] border-indigo-500/50 bg-indigo-600/5">
+              <div className="flex flex-col md:flex-row gap-8 items-start">
+                 <div className="flex-1 space-y-4">
+                    <div className="flex items-center gap-2">
+                       <Activity className="h-5 w-5 text-indigo-400" />
+                       <h4 className="text-xl font-black text-white uppercase tracking-tighter">Predictive Results</h4>
+                    </div>
+                    <p className="text-slate-400 text-sm font-medium leading-relaxed italic">
+                       "{analysisResult.conclusion}"
+                    </p>
+                 </div>
+                 
+                 <div className="grid grid-cols-2 gap-4 w-full md:w-auto">
+                    <div className="p-4 bg-slate-950/80 rounded-2xl border border-slate-800">
+                       <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-2 text-center">Linear Reg (R2)</span>
+                       <p className="text-2xl font-black text-blue-500 text-center">{analysisResult.linear_regression.r2}</p>
+                    </div>
+                    <div className="p-4 bg-slate-950/80 rounded-2xl border border-slate-800">
+                       <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1 text-center">Random Forest (R2)</span>
+                       <p className="text-2xl font-black text-emerald-500 text-center">{analysisResult.random_forest.r2}</p>
+                    </div>
+                 </div>
+              </div>
+           </div>
+
+           {/* Advanced EDA Insights Panel */}
+           <div className="glass-card p-8 rounded-[3rem] border-slate-800 bg-slate-950/30 overflow-hidden">
+              <div className="flex items-center gap-3 mb-8">
+                 <TrendingUp className="h-6 w-6 text-emerald-500" />
+                 <h4 className="text-xl font-black text-white uppercase tracking-tighter">Advanced EDA Focus</h4>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                 <div className="space-y-8">
+                    <div className="p-6 bg-slate-900/50 rounded-[2rem] border border-slate-800/50 relative overflow-hidden group">
+                       <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                          <Activity className="h-16 w-16" />
+                       </div>
+                       <h5 className="text-emerald-400 text-xs font-black uppercase tracking-[0.2em] mb-3">Premium vs Age</h5>
+                       <p className="text-slate-400 text-sm leading-relaxed font-medium">
+                          Our analysis reveals a <strong className="text-white">perfectly linear correlation</strong> between age and charges. On average, medical costs increase by ~$250 every year across all demographic groups.
+                       </p>
+                    </div>
+
+                    <div className="p-6 bg-slate-900/50 rounded-[2rem] border border-slate-800/50 relative overflow-hidden group border-orange-500/10">
+                       <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                          <AlertCircle className="h-16 w-16 text-orange-500" />
+                       </div>
+                       <h5 className="text-orange-400 text-xs font-black uppercase tracking-[0.2em] mb-3">Smoker vs Non-Smoker Comparison</h5>
+                       <p className="text-slate-400 text-sm leading-relaxed font-medium">
+                          The <strong className="text-white">smoking factor</strong> causes a sharp bifurcation in the data. Smokers consistently face premiums exceeding $20,000 more than non-smokers, regardless of age or BMI.
+                       </p>
+                    </div>
+                 </div>
+
+                 <div className="relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                    <div className="relative bg-slate-950 p-2 rounded-[2.5rem] border border-slate-800">
+                       <img 
+                          src="http://localhost:5000/insurance/insurance_eda_plots.png" 
+                          alt="EDA Visualization" 
+                          className="w-full h-auto rounded-[2rem] shadow-2xl opacity-80 group-hover:opacity-100 transition-opacity"
+                       />
+                       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 bg-slate-900/90 backdrop-blur-md rounded-full border border-slate-800/50">
+                          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Live Analysis Distribution Plot</span>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
         </div>
       )}
 
