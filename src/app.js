@@ -25,8 +25,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/insurance', express.static(path.join(__dirname, '..', 'insurance')));
 
 // Security & Logging
-app.use(helmet());
-app.use(cors());
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}));
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true
+}));
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }

@@ -7,7 +7,8 @@ const path = require('path');
 exports.analyzeInsurance = async (req, res) => {
   // Use 'python' or 'python3' depending on the environment
   const scriptPath = path.join(__dirname, '..', '..', 'insurance', 'insurance_analysis.py');
-  const cmd = `python "${scriptPath}"`;
+  const pythonCmd = process.env.PYTHON_CMD || 'python3';
+  const cmd = `${pythonCmd} "${scriptPath}"`;
 
   exec(cmd, (error, stdout, stderr) => {
     if (error) {

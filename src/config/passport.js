@@ -24,7 +24,7 @@ module.exports = function (passport) {
           const user = await User.findOneAndUpdate(
             { googleId: profile.id },
             { $set: newUser },
-            { upsert: true, new: true }
+            { upsert: true, returnDocument: 'after' }
           );
           done(null, user);
         } catch (err) {
