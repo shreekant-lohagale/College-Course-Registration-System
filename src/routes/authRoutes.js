@@ -29,8 +29,13 @@ router.get(
       }
     );
 
+    // Ensure frontend URL is absolute
+    const frontendUrl = process.env.FRONTEND_URL.startsWith('http') 
+      ? process.env.FRONTEND_URL 
+      : `https://${process.env.FRONTEND_URL}`;
+
     // Redirect to frontend with token
-    res.redirect(`${process.env.FRONTEND_URL}/login?token=${token}`);
+    res.redirect(`${frontendUrl}/login?token=${token}`);
   }
 );
 
